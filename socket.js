@@ -23,12 +23,37 @@ const removeUser = socketId => {
     users = users.filter(user => user.socketId !== socketId);
 }
 
+const findUser = id => {
+    const result = users.find(user => user.userId === id);
+    return result;
+}
+
 io.on('connection', socket => {
     console.log('Socket is running....');
 
     socket.on('addUser', (userId, userInfo) => {
         addUser(userId, socket.id, userInfo);
         io.emit('getUser', users);
+    });
+
+    socket.on('sendMessage', data => {
+        const user = findUser(data.receiverId);
+
+        console.log(user);
+
+        if (user !== undefined) {
+            socket.to(user.socketId).emit('getMessage', {
+                senderId: data.senderId,
+                senderName: data.senderName,
+                receiverId: data.receiverId,
+                createAt: data.time,
+                message: {
+                    text: data.message,
+                    image: data.image
+                }
+            })
+        }
+        console.log(data);
     })
 
     socket.on('disconnect', () => {
