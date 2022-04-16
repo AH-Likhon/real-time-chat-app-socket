@@ -39,7 +39,7 @@ io.on('connection', socket => {
     socket.on('sendMessage', data => {
         const user = findUser(data.receiverId);
 
-        console.log(user);
+        // console.log(user);
 
         if (user !== undefined) {
             socket.to(user.socketId).emit('getMessage', {
@@ -53,7 +53,19 @@ io.on('connection', socket => {
                 }
             })
         }
-        console.log(data);
+        // console.log('get', data);
+    })
+
+    socket.on('typing', data => {
+        const user = findUser(data.receiverId);
+
+        if (user !== undefined) {
+            socket.to(user.socketId).emit('getTyping', {
+                senderId: data.senderId,
+                receiverId: data.receiverId,
+                message: data.message
+            })
+        }
     })
 
     socket.on('disconnect', () => {
