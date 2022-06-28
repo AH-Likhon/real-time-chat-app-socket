@@ -4,6 +4,7 @@
   "description": "",
   "main": "socket.js",
   "scripts": {
+    "start": "node socket.js",
     "socket": "nodemon socket.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -11,7 +12,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "nodemon": "^2.0.15",
-    "socket.io": "^4.4.1"
+    "nodemon": "^2.0.18",
+    "socket.io": "^4.5.1"
   }
 }

@@ -29,7 +29,7 @@ const findUser = id => {
 }
 
 io.on('connection', socket => {
-    console.log('Socket is running....');
+    // console.log('Socket is running....');
 
     socket.on('addUser', (userId, userInfo) => {
         addUser(userId, socket.id, userInfo);
@@ -58,6 +58,8 @@ io.on('connection', socket => {
 
     socket.on('typing', data => {
         const user = findUser(data.receiverId);
+
+        console.log(data);
 
         if (user !== undefined) {
             socket.to(user.socketId).emit('getTyping', {
