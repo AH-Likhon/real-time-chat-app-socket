@@ -10,7 +10,7 @@ let users = [];
 const addUser = (userId, socketId, userInfo) => {
     const checkUser = users.some(user => user.userId === userId);
 
-    if (checkUser === false) {
+    if (!checkUser) {
         users.push({
             userId,
             socketId,
@@ -46,6 +46,7 @@ io.on('connection', socket => {
                 senderId: data.senderId,
                 senderName: data.senderName,
                 receiverId: data.receiverId,
+                receiverName: data.receiverName,
                 createAt: data.time,
                 message: {
                     text: data.message,
@@ -53,13 +54,13 @@ io.on('connection', socket => {
                 }
             })
         }
-        // console.log('get', data);
+        console.log('get', data);
     })
 
     socket.on('typing', data => {
         const user = findUser(data.receiverId);
 
-        console.log(data);
+        // console.log(data);
 
         if (user !== undefined) {
             socket.to(user.socketId).emit('getTyping', {
