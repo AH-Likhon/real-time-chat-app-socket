@@ -39,22 +39,23 @@ io.on('connection', socket => {
     socket.on('sendMessage', data => {
         const user = findUser(data.receiverId);
 
-        // console.log(user);
+        console.log(data);
 
         if (user !== undefined) {
             socket.to(user.socketId).emit('getMessage', {
+                // _id: data._id,
                 senderId: data.senderId,
                 senderName: data.senderName,
                 receiverId: data.receiverId,
                 receiverName: data.receiverName,
-                createAt: data.time,
+                createdAt: data.time,
                 message: {
                     text: data.message,
                     image: data.image
                 }
             })
         }
-        console.log('get', data);
+        // console.log('get', data);
     })
 
     socket.on('typing', data => {
