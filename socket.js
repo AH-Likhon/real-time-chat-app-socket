@@ -39,16 +39,17 @@ io.on('connection', socket => {
     socket.on('sendMessage', data => {
         const user = findUser(data.receiverId);
 
-        console.log(data);
+        // console.log(data);
 
         if (user !== undefined) {
             socket.to(user.socketId).emit('getMessage', {
-                // _id: data._id,
+                uid: data.uid,
                 senderId: data.senderId,
                 senderName: data.senderName,
                 receiverId: data.receiverId,
                 receiverName: data.receiverName,
                 createdAt: data.time,
+                status: data.status,
                 message: {
                     text: data.message,
                     image: data.image
@@ -68,6 +69,28 @@ io.on('connection', socket => {
                 senderId: data.senderId,
                 receiverId: data.receiverId,
                 message: data.message
+            })
+        }
+    });
+
+    socket.on('seenSMS', sms => {
+        console.log('seen', sms);
+        const user = findUser(sms.senderId);
+        if (user !== undefined) {
+            socket.to(user.socketId).emit('seenSmsRes', {
+                ...sms,
+                status: 'seen'
+            })
+        }
+    });
+
+    socket.on('deliveredSMS', sms => {
+        console.log('delivered', sms);
+        const user = findUser(sms.senderId);
+        if (user !== undefined) {
+            socket.to(user.socketId).emit('deliveredSmsRes', {
+                ...sms,
+                status: 'delivered'
             })
         }
     })
