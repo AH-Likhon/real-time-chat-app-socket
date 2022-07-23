@@ -93,6 +93,17 @@ io.on('connection', socket => {
                 status: 'delivered'
             })
         }
+    });
+
+    socket.on('updateSeenSMS', sms => {
+        console.log('updateSeenSMS', sms);
+        const user = findUser(sms.senderId);
+        if (user !== undefined) {
+            socket.to(user.socketId).emit('updateSeenSMSRes', {
+                ...sms,
+                status: 'seen'
+            })
+        }
     })
 
     socket.on('disconnect', () => {
