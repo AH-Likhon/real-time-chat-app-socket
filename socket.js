@@ -26,7 +26,21 @@ const removeUser = socketId => {
 const findUser = id => {
     const result = users.find(user => user.userId === id);
     return result;
-}
+};
+
+const userLogout = userId => {
+    users = users.filter(user => user.userId !== userId);
+};
+
+// const tokenDecode = (token) => {
+//     const tokenDecoded = deCodeToken(token);
+//     console.log(tokenDecoded);
+//     const expTime = new Date(tokenDecoded.exp * 1000);
+//     if (new Date() > expTime) {
+//         return null;
+//     }
+//     return tokenDecoded;
+// }
 
 io.on('connection', socket => {
     // console.log('Socket is running....');
@@ -104,6 +118,16 @@ io.on('connection', socket => {
                 status: 'seen'
             })
         }
+    });
+
+    socket.on('logout', userInfo => {
+        // console.log('Logout', userInfo);
+        // console.log('Logout Id', userInfo.id);
+        // const user = findUser(userInfo.id);
+        // if (user !== undefined) {
+        //     socket.to(userInfo.id).emit('logoutUser', userInfo);
+        // }
+        userLogout(userInfo.id);
     })
 
     socket.on('disconnect', () => {
