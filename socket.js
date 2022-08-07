@@ -48,6 +48,12 @@ io.on('connection', socket => {
     socket.on('addUser', (userId, userInfo) => {
         addUser(userId, socket.id, userInfo);
         io.emit('getUser', users);
+
+        const restUsers = users.filter(user => user.userId !== userId);
+        const newRes = 'add_new_user';
+        for (let i = 0; i < restUsers.length; i++) {
+            socket.to(restUsers[i].socketId).emit('add_new_user', newRes)
+        };
     });
 
     socket.on('sendMessage', data => {
